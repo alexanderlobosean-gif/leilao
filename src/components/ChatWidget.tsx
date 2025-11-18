@@ -27,6 +27,9 @@ const ChatWidget: React.FC = () => {
             <button
               type="button"
               className="w-full flex items-center rounded-xl overflow-hidden bg-white text-gray-900 shadow-sm hover:shadow-md transition-shadow"
+              onClick={() => {
+                window.location.href = "tel:+551431490697";
+              }}
             >
               <div className="h-full bg-[#2563eb] flex items-center justify-center px-3 py-3">
                 <Phone className="h-5 w-5 text-white" />
@@ -40,12 +43,18 @@ const ChatWidget: React.FC = () => {
             <button
               type="button"
               className="w-full flex items-center rounded-xl overflow-hidden bg-white text-gray-900 shadow-sm hover:shadow-md transition-shadow"
+              onClick={() => {
+                window.open(
+                  "https://api.whatsapp.com/send?phone=551431490697&text=Envie-nos%20suas%20D%C3%BAvidas",
+                  "_blank"
+                );
+              }}
             >
               <div className="h-full bg-[#22c55e] flex items-center justify-center px-3 py-3">
                 <MessageCircle className="h-5 w-5 text-white" />
               </div>
               <div className="flex-1 text-left px-3 py-2">
-                <p className="text-xs font-semibold">Tirar dúvidas pelo WhatsApp</p>
+                <p className="text-xs font-semibold">Conversar com nossos atendentes</p>
               </div>
             </button>
 
@@ -53,6 +62,9 @@ const ChatWidget: React.FC = () => {
             <button
               type="button"
               className="w-full flex items-center rounded-xl overflow-hidden bg-white text-gray-900 shadow-sm hover:shadow-md transition-shadow"
+              onClick={() => {
+                window.location.href = "mailto:sac@grupotrivelli.app";
+              }}
             >
               <div className="h-full bg-[#0ea5e9] flex items-center justify-center px-3 py-3">
                 <Mail className="h-5 w-5 text-white" />
