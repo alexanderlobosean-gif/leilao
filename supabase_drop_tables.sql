@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS public.bids CASCADE;
+DROP TABLE IF EXISTS public.qualifications CASCADE;
+DROP TABLE IF EXISTS public.documents CASCADE;
+DROP TABLE IF EXISTS public.lots CASCADE;
