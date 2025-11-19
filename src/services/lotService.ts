@@ -23,6 +23,7 @@ export interface Lot {
   short_description: string;
   description: string;
   image_url: string;
+  image_urls?: string | null;
   initial_bid: number;
   current_bid: number;
   bids_count: number;
@@ -103,6 +104,7 @@ const formatLots = (lots: any[]): Lot[] => {
     short_description: lot.short_description || 'Descrição não disponível',
     description: lot.description || '',
     image_url: lot.image_url || 'https://via.placeholder.com/300x200?text=Sem+imagem',
+    image_urls: lot.image_urls || null,
     initial_bid: Number(lot.initial_bid) || 0,
     current_bid: Number(lot.current_bid) || Number(lot.initial_bid) || 0,
     bids_count: Number(lot.bids_count) || 0,

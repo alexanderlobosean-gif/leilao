@@ -24,6 +24,10 @@ const lotFormSchema = z.object({
     .string()
     .url({ message: "URL da imagem inválida." })
     .min(1, { message: "URL da imagem é obrigatória." }),
+  image_urls: z
+    .string()
+    .optional()
+    .transform((val) => val === '' ? undefined : val),
   initial_bid: z.coerce.number().min(0.01, { message: "Lance inicial deve ser positivo." }),
   ends_at: z.date({ required_error: "Data de encerramento é obrigatória." }),
   status: z.enum(["aberto", "finalizado"], { required_error: "Status é obrigatório." }),
@@ -49,6 +53,7 @@ const LotForm: React.FC<LotFormProps> = ({ initialData, onSubmit, onCancel, isLo
       title: initialData?.title || '',
       short_description: initialData?.short_description || '',
       image_url: initialData?.image_url || '',
+      image_urls: (initialData as any)?.image_urls || '',
       initial_bid: initialData?.initial_bid || 0,
       ends_at: initialData?.ends_at ? new Date(initialData.ends_at) : undefined,
       status: initialData?.status || 'aberto',
@@ -121,6 +126,17 @@ const LotForm: React.FC<LotFormProps> = ({ initialData, onSubmit, onCancel, isLo
         {form.formState.errors.image_url && (
           <p className="text-red-500 text-sm">{form.formState.errors.image_url.message}</p>
         )}
+      </div>
+
+      <div className="grid gap-2">
+        <Label htmlFor="image_urls">URLs adicionais (uma por linha ou separadas por vírgula)</Label>
+        <Textarea
+          id="image_urls"
+          placeholder={"https://exemplo.com/imagem2.jpg\nhttps://exemplo.com/imagem3.jpg"}
+          rows={3}
+          {...form.register("image_urls")}
+          disabled={isLoading}
+        />
       </div>
 
       <div className="grid gap-2">

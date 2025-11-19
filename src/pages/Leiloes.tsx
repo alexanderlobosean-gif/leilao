@@ -12,6 +12,7 @@ interface Leilao {
   short_description: string;
   description: string;
   image_url: string;
+  image_urls?: string | null;
   initial_bid: number;
   current_bid: number;
   bids_count: number;
@@ -83,6 +84,18 @@ const Leiloes = () => {
       style: 'currency',
       currency: 'BRL'
     }).format(valor);
+  };
+
+  const getLeilaoCardImage = (leilao: Leilao) => {
+    const raw = leilao.image_urls as string | null | undefined;
+    if (raw) {
+      const first = raw
+        .split(/[\n,]+/)
+        .map((s) => s.trim())
+        .filter((s) => !!s)[0];
+      if (first) return first;
+    }
+    return leilao.image_url;
   };
 
   if (loading) {
@@ -177,7 +190,7 @@ const Leiloes = () => {
                   className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                 >
                   <img
-                    src={leilao.image_url}
+                    src={getLeilaoCardImage(leilao)}
                     alt={leilao.title}
                     className="w-full h-40 object-cover"
                     onError={(e) => {

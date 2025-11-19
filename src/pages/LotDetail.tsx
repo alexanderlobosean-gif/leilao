@@ -34,6 +34,7 @@ const LotDetail = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const [lot, setLot] = useState<Lot | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [bidIncrementValue, setBidIncrementValue] = useState<string>('');
   const [now, setNow] = useState(Date.now());
   const [loading, setLoading] = useState(true);
@@ -53,6 +54,7 @@ const LotDetail = () => {
         const fetchedLot = await fetchLotById(id);
         if (fetchedLot) {
           setLot(fetchedLot);
+          setCurrentImageIndex(0);
         } else {
           navigate("/404");
         }
@@ -189,6 +191,20 @@ const LotDetail = () => {
     );
   }
 
+  const galleryImages = (() => {
+    const raw = (lot as any).image_urls as string | null | undefined;
+    const fromList = raw
+      ? raw
+          .split(/[\n,]+/)
+          .map((s) => s.trim())
+          .filter((s) => !!s)
+      : [];
+    if (fromList.length > 0) return fromList;
+    return [lot.image_url];
+  })();
+
+  const mainImage = galleryImages[Math.min(currentImageIndex, galleryImages.length - 1)];
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
       <Header showBackButton={true} />
@@ -198,7 +214,35 @@ const LotDetail = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Coluna da Esquerda: Imagem e Descrição */}
           <div className="md:col-span-2 bg-white rounded-2xl shadow p-6">
-            <img src={lot.image_url} alt={lot.title} className="w-full h-96 object-cover rounded-lg mb-6" />
+            <div className="mb-4">
+              <img
+                src={mainImage}
+                alt={lot.title}
+                className="w-full h-96 object-cover rounded-lg mb-3"
+              />
+              {galleryImages.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  {galleryImages.map((img, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`border rounded-md overflow-hidden flex-shrink-0 ${
+                        index === currentImageIndex
+                          ? "border-emerald-500 ring-2 ring-emerald-300"
+                          : "border-gray-200"
+                      }`}
+                    >
+                      <img
+                        src={img}
+                        alt={`${lot.title} - imagem ${index + 1}`}
+                        className="w-20 h-16 object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <h2 className="text-3xl font-bold text-gray-800 mb-2">{lot.title}</h2>
             <p className="text-lg text-gray-600 mb-4">{lot.short_description}</p>
             <p className="text-sm text-gray-500 mb-4">ID do Lote: {lot.id}</p>

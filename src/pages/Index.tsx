@@ -55,6 +55,18 @@ const Index = () => {
     navigate(`/lot/${lot.id}`);
   }
 
+  const getLotCardImage = (lot: Lot) => {
+    const raw = (lot as any).image_urls as string | null | undefined;
+    if (raw) {
+      const first = raw
+        .split(/[\n,]+/)
+        .map((s) => s.trim())
+        .filter((s) => !!s)[0];
+      if (first) return first;
+    }
+    return lot.image_url;
+  };
+
   const filteredLots = lots.filter((lot) => {
     const matchesSearch =
       lot.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -147,7 +159,7 @@ const Index = () => {
                   className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                 >
                   <img
-                    src={lot.image_url}
+                    src={getLotCardImage(lot)}
                     alt={lot.title}
                     className="w-full h-40 object-cover"
                   />
@@ -219,7 +231,7 @@ const Index = () => {
                     className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                   >
                     <img
-                      src={lot.image_url}
+                      src={getLotCardImage(lot)}
                       alt={lot.title}
                       className="w-full h-40 object-cover"
                     />
