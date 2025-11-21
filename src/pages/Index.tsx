@@ -27,9 +27,10 @@ const Index = () => {
         const fetchedLots = await fetchAllLots();
         setLots(fetchedLots);
       } catch (err) {
-        setError("Não foi possível carregar os lotes.");
-        showError("Não foi possível carregar os lotes.");
-        console.error(err);
+        const message = (err as any)?.message || "Não foi possível carregar os lotes.";
+        setError(message);
+        showError(`Erro ao carregar os lotes: ${message}`);
+        console.error('❌ Erro em getLots (Index):', err);
       } finally {
         setLoading(false);
       }

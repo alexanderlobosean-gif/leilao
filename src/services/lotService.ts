@@ -49,42 +49,39 @@ export const fetchAllLots = async (): Promise<Lot[]> => {
   console.log('🔍 Buscando lotes no banco de dados...');
   
   try {
-    // Usando uma consulta SQL direta com relacionamento de categorias
+    // Consulta principal simples com relacionamento de categorias
     const { data: lots, error } = await supabase
       .from('lots')
       .select('*, categories:category_id ( id, slug, name )')
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('❌ Erro ao buscar lotes:', error);
-      
-      // Se houver erro, tenta buscar com uma consulta SQL personalizada
-      console.log('🔄 Tentando buscar lotes com consulta personalizada...');
-      const { data: customQueryData, error: customError } = await supabase
-        .rpc('get_public_lots')
-        .select('*, categories:category_id ( id, slug, name )');
-      
-      if (customError) {
-        console.error('❌ Erro na consulta personalizada:', customError);
-        
-        // Última tentativa: buscar com uma consulta SQL bruta
-        console.log('🔄 Tentando consulta SQL bruta...');
-        const { data: rawData, error: rawError } = await supabase
-          .from('lots')
-          .select('*, categories:category_id ( id, slug, name )')
-          .order('created_at', { ascending: false });
-        
-        if (rawError) {
-          console.error('❌ Erro na consulta bruta:', rawError);
-          throw rawError;
-        }
-        
-        console.log(`✅ ${rawData?.length || 0} lotes encontrados (consulta bruta)`);
-        return formatLots(rawData || []);
+      console.error('❌ Erro ao buscar lotes (consulta principal):', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+      });
+
+      // Fallback simples: tentar novamente sem relacionamento de categorias
+      console.log('🔄 Tentando buscar lotes sem relacionamento de categorias...');
+      const { data: fallbackData, error: fallbackError } = await supabase
+        .from('lots')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (fallbackError) {
+        console.error('❌ Erro na consulta de fallback:', {
+          message: fallbackError.message,
+          code: fallbackError.code,
+          details: fallbackError.details,
+          hint: fallbackError.hint,
+        });
+        throw fallbackError;
       }
-      
-      console.log(`✅ ${customQueryData?.length || 0} lotes encontrados (consulta personalizada)`);
-      return formatLots(customQueryData || []);
+
+      console.log(`✅ ${fallbackData?.length || 0} lotes encontrados (fallback)`);
+      return formatLots(fallbackData || []);
     }
     
     console.log(`✅ ${lots?.length || 0} lotes encontrados`);

@@ -44,8 +44,9 @@ const Leiloes = () => {
           setLeiloes([]);
         }
       } catch (err) {
+        const message = (err as any)?.message || 'Não foi possível carregar os leilões. Tente novamente mais tarde.';
         console.error('❌ Erro ao carregar leilões:', err);
-        setError('Não foi possível carregar os leilões. Tente novamente mais tarde.');
+        setError(message);
       } finally {
         setLoading(false);
       }

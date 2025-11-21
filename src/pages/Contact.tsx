@@ -109,18 +109,23 @@ const Contact = () => {
             <CardContent className="space-y-4">
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-emerald-600" />
-                <p className="text-gray-700">contato@exemplo.leiloes</p>
+                <p className="text-gray-700">ti@grupotrivelli.app</p>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-emerald-600" />
-                <p className="text-gray-700">(81) 9xxxx-xxxx</p>
+                <p className="text-gray-700">(14) 3149-0697 | (14) 3149-0697</p>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-emerald-600 mt-1" />
                 <p className="text-gray-700">
-                  Rua Exemplo, 123 - Bairro Central <br />
-                  Cidade Exemplo, UF - CEP 00000-000
+                  Av. Comendador José da Silva Martha, 42-2 – Jardim Ouro Verde<br />
+                  Bauru – SP<br />
+                  CEP: 17054-630
                 </p>
+              </div>
+              <div className="mt-2 text-gray-700 text-sm space-y-1">
+                <p>Segunda à Sexta-feira das 09:00h às 18:00h</p>
+                <p>Sábado das 09:00h às 14:00h</p>
               </div>
             </CardContent>
           </Card>
