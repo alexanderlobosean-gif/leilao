@@ -104,6 +104,20 @@ const ManageLots = () => {
     }
   };
 
+  const handleCloseLot = async (lot: Lot) => {
+    try {
+      setIsSubmitting(true);
+      await updateLot(lot.id, { status: 'encerrado' });
+      showSuccess(`Lote "${lot.title}" encerrado com sucesso!`);
+      await getLots();
+    } catch (err: any) {
+      showError(`Erro ao encerrar lote: ${err.message || 'Erro desconhecido'}`);
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleFormSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
@@ -224,6 +238,14 @@ const ManageLots = () => {
                     <TableCell className="text-right flex justify-end gap-2">
                       <Button variant="ghost" size="sm" onClick={() => handleEditLot(lot)}>
                         <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={isSubmitting || lot.status === 'encerrado'}
+                        onClick={() => handleCloseLot(lot)}
+                      >
+                        Encerrar
                       </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>

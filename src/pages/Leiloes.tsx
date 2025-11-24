@@ -55,17 +55,19 @@ const Leiloes = () => {
     carregarLeiloes();
   }, []);
 
-  const filteredLeiloes = leiloes.filter((lot: any) => {
-    const matchesSearch =
-      lot.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lot.short_description.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredLeiloes = leiloes
+    .filter((lot: any) => lot.status === 'aberto')
+    .filter((lot: any) => {
+      const matchesSearch =
+        lot.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        lot.short_description.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesCategory =
-      selectedCategory === "todas" ||
-      (lot.category && lot.category.toLowerCase() === selectedCategory.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "todas" ||
+        (lot.category && lot.category.toLowerCase() === selectedCategory.toLowerCase());
 
-    return matchesSearch && matchesCategory;
-  });
+      return matchesSearch && matchesCategory;
+    });
 
   // Função para formatar a data de término
   const formatarData = (dataString: string) => {

@@ -68,17 +68,19 @@ const Index = () => {
     return lot.image_url;
   };
 
-  const filteredLots = lots.filter((lot) => {
-    const matchesSearch =
-      lot.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lot.short_description.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredLots = lots
+    .filter((lot) => lot.status === 'aberto')
+    .filter((lot) => {
+      const matchesSearch =
+        lot.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        lot.short_description.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesCategory =
-      selectedCategory === "todas" ||
-      (lot.category && lot.category.toLowerCase() === selectedCategory.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "todas" ||
+        (lot.category && lot.category.toLowerCase() === selectedCategory.toLowerCase());
 
-    return matchesSearch && matchesCategory;
-  });
+      return matchesSearch && matchesCategory;
+    });
 
   if (loading) {
     return (
